@@ -18,5 +18,16 @@ export default function Login() {
     document.title = 'Login - Instagram';
   }, []);
 
-  return <p>I am the login page.</p>;
+  return (
+    <div className="container flex mx-auto max-w-screen-md items-center">
+      <div className="flex w-3/5">
+        <img
+          src="/images/iphone-with-profile.jpg"
+          alt="iPhone with Instagram app"
+          className="max-w-full"
+        />
+      </div>
+      <div className="flex w-2/5">I will be the form!</div>
+    </div>
+  );
 }
