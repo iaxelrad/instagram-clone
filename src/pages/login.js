@@ -13,7 +13,18 @@ export default function Login() {
   const [error, setError] = useState('');
   const isInvalid = password === '' || emailAddress === '';
 
-  const handleLogin = () => {};
+  const handleLogin = async event => {
+    event.preventDefault();
+
+    try {
+      await firebase.auth().signInWithEmailAndPassword(emailAddress, password);
+      history.push(ROUTES.DASHBOARD);
+    } catch (error) {
+      setEmailAddress('');
+      setPassword('');
+      setError(error.message);
+    }
+  };
 
   useEffect(() => {
     document.title = 'Login - Instagram';
@@ -60,7 +71,7 @@ export default function Login() {
               onChange={({ target }) => setPassword(target.value)}
             />
             <button
-              disable={isInvalid}
+              disabled={isInvalid}
               type="submit"
               className={`bg-blue-medium text-white w-full rounded h-8
             font-bold 
