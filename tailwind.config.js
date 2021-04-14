@@ -12,7 +12,7 @@ module.exports = {
         medium: '#005c98', //blue-medium
       },
       black: {
-        light: '#005c98',
+        light: '#262626',
         faded: '#00000059',
       },
       gray: {
