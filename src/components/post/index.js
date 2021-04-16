@@ -12,7 +12,6 @@ export default function Post({ content }) {
   const handleFocus = () => {
     commentInput.current.focus();
   };
-  // header, image, actions (like, comment icons), footer, comments
 
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12">
