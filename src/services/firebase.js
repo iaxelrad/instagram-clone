@@ -53,9 +53,9 @@ export async function getSuggestedProfiles(userId, following) {
 }
 
 export async function updateLoggedInUserFollowing(
-  loggedInUserDocId,
-  profileId,
-  isFollowingProfile
+  loggedInUserDocId, //currently logged in user document id.
+  profileId, //the user that logged in user requests to follow.
+  isFollowingProfile // true/false - Am I following this person.
 ) {
   return firebase
     .firestore()
@@ -122,4 +122,48 @@ export async function getUserPhotosByUsername(username) {
     ...item.data(),
     docId: item.id,
   }));
+}
+
+export async function isUserFollowingProfile(
+  loggedInUserUsername,
+  profileUserId
+) {
+  const result = await firebase
+    .firestore()
+    .collection('users')
+    .where('username', '==', loggedInUserUsername)
+    .where('following', 'array-contains', profileUserId)
+    .get();
+
+  const [response = {}] = result.docs.map(item => ({
+    ...item.data(),
+    docId: item.id,
+  }));
+
+  return response.userId;
+}
+
+export async function toggleFollow(
+  isFollowingProfile,
+  activeUserDocId,
+  profileDocId,
+  profileUserId,
+  followingUserId
+) {
+  await updateLoggedInUserFollowing(
+    // Itamar's doc id
+    activeUserDocId,
+    // Raphaels user id
+    profileUserId,
+    //Is Itamar following Raphael - true/false
+    isFollowingProfile
+  );
+  await updateFollowedUserFollowers(
+    // Itamar's doc id
+    profileDocId,
+    // Raphaels user id
+    followingUserId,
+    //Is Itamar following Raphael - true/false
+    isFollowingProfile
+  );
 }
