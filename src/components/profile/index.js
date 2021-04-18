@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from './header';
