@@ -31,12 +31,11 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="container flex mx-auto max-w-screen-md items-center">
+    <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
         <img
           src="/images/iphone-with-profile.jpg"
           alt="iPhone with Instagram app"
-          className="max-w-full"
         />
       </div>
       <div className="flex flex-col w-2/5">
@@ -47,7 +46,7 @@ export default function Login() {
           <h1 className="flex justify-center w-full">
             <img
               src="/images/logo.png"
-              alt="instagram"
+              alt="Instagram"
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
@@ -79,18 +78,15 @@ export default function Login() {
             font-bold 
             ${isInvalid && 'opacity-50'}`}
             >
-              Sign In
+              Login
             </button>
           </form>
         </div>
-        <div
-          className="flex flex-col justify-center w-full bg-white p-4 
-        border border-gray-primary rounded items-center"
-        >
-          <p className="text-sm ">
-            Don't have an account?{' '}
+        <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-primary">
+          <p className="text-sm">
+            Don't have an account?{` `}
             <Link to={ROUTES.SIGN_UP} className="font-bold text-blue-medium">
-              Sign Up
+              Sign up
             </Link>
           </p>
         </div>

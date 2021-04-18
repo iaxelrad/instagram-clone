@@ -15,8 +15,8 @@ export default function AddComment({
     user: { displayName },
   } = useContext(UserContext);
 
-  const handleSubmitComment = e => {
-    e.preventDefault();
+  const handleSubmitComment = event => {
+    event.preventDefault();
 
     setComments([...comments, { displayName, comment }]);
     setComment('');
@@ -29,13 +29,16 @@ export default function AddComment({
         comments: FieldValue.arrayUnion({ displayName, comment }),
       });
   };
+
   return (
     <div className="border-t border-gray-primary">
       <form
         method="POST"
         className="flex justify-between pl-0 pr-5"
-        onSubmit={e =>
-          comment.length >= 1 ? handleSubmitComment(e) : e.preventDefault()
+        onSubmit={event =>
+          comment.length >= 1
+            ? handleSubmitComment(event)
+            : event.preventDefault()
         }
       >
         <input
@@ -44,7 +47,7 @@ export default function AddComment({
           className="text-sm text-gray-base w-full mr-3 py-5 px-4"
           type="text"
           name="add-comment"
-          placeholder="Add a comment"
+          placeholder="Add a comment..."
           value={comment}
           onChange={({ target }) => setComment(target.value)}
           ref={commentInput}

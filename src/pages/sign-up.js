@@ -16,32 +16,35 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const isInvalid = password === '' || emailAddress === '';
 
-  const handleSignup = async event => {
+  const handleSignUp = async event => {
     event.preventDefault();
 
-    const userNameExists = await doesUsernameExist(username);
-    if (!userNameExists.length) {
+    const usernameExists = await doesUsernameExist(username);
+    if (!usernameExists.length) {
       try {
         const createdUserResult = await firebase
           .auth()
           .createUserWithEmailAndPassword(emailAddress, password);
 
-        //authentication
+        // authentication
         // -> emailAddress & password & username (displayName)
         await createdUserResult.user.updateProfile({
           displayName: username,
         });
 
         // firebase user collection (create a document)
-        await firebase.firestore().collection('users').add({
-          userId: createdUserResult.user.uid,
-          username: username.toLowerCase(),
-          fullName,
-          emailAddress: emailAddress.toLowerCase(),
-          following: [],
-          followers: [],
-          dateCreated: Date.now(),
-        });
+        await firebase
+          .firestore()
+          .collection('users')
+          .add({
+            userId: createdUserResult.user.uid,
+            username: username.toLowerCase(),
+            fullName,
+            emailAddress: emailAddress.toLowerCase(),
+            following: ['2'],
+            followers: [],
+            dateCreated: Date.now(),
+          });
 
         history.push(ROUTES.DASHBOARD);
       } catch (error) {
@@ -57,16 +60,15 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    document.title = 'Signup - Instagram';
+    document.title = 'Sign Up - Instagram';
   }, []);
 
   return (
-    <div className="container flex mx-auto max-w-screen-md items-center">
+    <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
         <img
           src="/images/iphone-with-profile.jpg"
           alt="iPhone with Instagram app"
-          className="max-w-full"
         />
       </div>
       <div className="flex flex-col w-2/5">
@@ -77,14 +79,14 @@ export default function SignUp() {
           <h1 className="flex justify-center w-full">
             <img
               src="/images/logo.png"
-              alt="instagram"
+              alt="Instagram"
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
 
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
-          <form onSubmit={handleSignup} method="POST">
+          <form onSubmit={handleSignUp} method="POST">
             <input
               aria-label="Enter your username"
               type="text"
@@ -133,7 +135,7 @@ export default function SignUp() {
           className="flex flex-col justify-center w-full bg-white p-4 
         border border-gray-primary rounded items-center"
         >
-          <p className="text-sm ">
+          <p className="text-sm">
             Have an account?{' '}
             <Link to={ROUTES.LOGIN} className="font-bold text-blue-medium">
               Login

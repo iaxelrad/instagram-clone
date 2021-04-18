@@ -17,7 +17,7 @@ export default function Header() {
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
             <h1 className="flex justify-center w-full">
-              <Link to={ROUTES.DASHBOARD} aria-label="Instagram">
+              <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
                 <img
                   src="/images/logo.png"
                   alt="Instagram"
@@ -27,7 +27,7 @@ export default function Header() {
             </h1>
           </div>
           <div className="text-gray-700 text-center flex items-center align-items">
-            {user.username ? (
+            {user ? (
               <>
                 <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
                   <svg
@@ -47,14 +47,15 @@ export default function Header() {
                 </Link>
                 <button
                   type="button"
-                  title="Sign out"
+                  title="Sign Out"
                   onClick={() => {
                     firebase.auth().signOut();
                     history.push(ROUTES.LOGIN);
                   }}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
+                  onKeyDown={event => {
+                    if (event.key === 'Enter') {
                       firebase.auth().signOut();
+                      history.push(ROUTES.LOGIN);
                     }
                   }}
                 >

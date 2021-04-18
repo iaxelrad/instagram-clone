@@ -58,7 +58,7 @@ export default function Header({
         {profileUsername ? (
           <img
             className="rounded-full h-40 w-40 flex"
-            alt={`${user.username} profile picture`}
+            alt={`${fullName} profile picture`}
             src={`/images/avatars/${profileUsername}.jpg`}
           />
         ) : (
@@ -77,7 +77,11 @@ export default function Header({
               className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
               type="button"
               onClick={handleToggleFollow}
-              onKeyDown={event => handleToggleFollow()}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleToggleFollow();
+                }
+              }}
             >
               {isFollowingProfile ? 'Unfollow' : 'Follow'}
             </button>
@@ -96,7 +100,7 @@ export default function Header({
                 {followerCount === 1 ? 'follower' : 'followers'}
               </p>
               <p className="mr-10">
-                <span className="font-bold">{following.length}</span> following
+                <span className="font-bold">{following?.length}</span> following
               </p>
             </>
           )}
@@ -119,7 +123,7 @@ Header.propTypes = {
     docId: PropTypes.string,
     userId: PropTypes.string,
     fullName: PropTypes.string,
-    profileUsername: PropTypes.string,
+    username: PropTypes.string,
     followers: PropTypes.array,
     following: PropTypes.array,
   }).isRequired,

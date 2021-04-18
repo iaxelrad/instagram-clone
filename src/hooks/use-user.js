@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getUserByUserId } from '../services/firebase';
 
 export default function useUser(userId) {
-  const [activeUser, setActiveUser] = useState({});
+  const [activeUser, setActiveUser] = useState();
 
   useEffect(() => {
     async function getUserObjByUserId(userId) {
