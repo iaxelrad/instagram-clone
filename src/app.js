@@ -25,7 +25,7 @@ export default function App() {
             <ProtectedRoute user={user} path={ROUTES.DASHBOARD} exact>
               <Dashboard />
             </ProtectedRoute>
-            <Route component={NotFound} exact />
+            <Route component={NotFound} />
           </Switch>
         </Suspense>
       </Router>
