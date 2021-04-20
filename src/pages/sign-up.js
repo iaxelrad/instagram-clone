@@ -84,9 +84,13 @@ export default function SignUp() {
             />
           </h1>
 
-          {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
+          {error && (
+            <p data-testid="error" className="mb-4 text-xs text-red-primary">
+              {error}
+            </p>
+          )}
 
-          <form onSubmit={handleSignUp} method="POST">
+          <form onSubmit={handleSignUp} method="POST" data-testid="sign-up">
             <input
               aria-label="Enter your username"
               type="text"
@@ -121,6 +125,7 @@ export default function SignUp() {
               value={password}
             />
             <button
+              data-testid="submit"
               disabled={isInvalid}
               type="submit"
               className={`bg-blue-medium text-white w-full rounded h-8
@@ -137,7 +142,11 @@ export default function SignUp() {
         >
           <p className="text-sm">
             Have an account?{' '}
-            <Link to={ROUTES.LOGIN} className="font-bold text-blue-medium">
+            <Link
+              to={ROUTES.LOGIN}
+              className="font-bold text-blue-medium"
+              data-testid="login"
+            >
               Login
             </Link>
           </p>
