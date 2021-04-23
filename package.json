@@ -47,7 +47,9 @@
       "!<rootDir>/src/fixtures/*.js",
       "!<rootDir>/src/hooks/*.js",
       "!<rootDir>/src/helpers/*.js",
-      "!<rootDir>/src/services/firebase/*.js"
+      "!<rootDir>/src/services/firebase.js",
+      "!<rootDir>/src/lib/firebaseConfig.template.js",
+      "!<rootDir>/src/lib/config.js"
     ],
     "coverageThreshold": {
       "global": {
