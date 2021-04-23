@@ -118,14 +118,16 @@ describe('<SignUp />', () => {
 
       expect(document.title).toEqual('Sign Up - Instagram');
       await expect(doesUsernameExist).toHaveBeenCalled();
-      await expect(doesUsernameExist).toHaveBeenCalledWith('karl');
+      await expect(doesUsernameExist).toHaveBeenCalledWith('itamar');
 
       await waitFor(() => {
         expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.DASHBOARD);
         expect(getByPlaceholderText('Username').value).toBe('');
-        expect(getByPlaceholderText('Full name').value).toBe('');
-        expect(getByPlaceholderText('Email address').value).toBe('');
-        expect(getByPlaceholderText('Password').value).toBe('');
+        expect(getByPlaceholderText('Full name').value).toBe('Itamar Axelrad');
+        expect(getByPlaceholderText('Email address').value).toBe(
+          'iaxelrad@gmail.com'
+        );
+        expect(getByPlaceholderText('Password').value).toBe('password');
         expect(queryByTestId('error')).toBeTruthy();
       });
     });
@@ -175,7 +177,7 @@ describe('<SignUp />', () => {
 
       await waitFor(() => {
         expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.DASHBOARD);
-        expect(getByPlaceholderText('Username').value).toBe('');
+        expect(getByPlaceholderText('Username').value).toBe('itamar');
         expect(getByPlaceholderText('Full name').value).toBe('');
         expect(getByPlaceholderText('Email address').value).toBe('');
         expect(getByPlaceholderText('Password').value).toBe('');

@@ -125,7 +125,6 @@ export default function SignUp() {
               value={password}
             />
             <button
-              data-testid="submit"
               disabled={isInvalid}
               type="submit"
               className={`bg-blue-medium text-white w-full rounded h-8
