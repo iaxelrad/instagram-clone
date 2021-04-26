@@ -10,7 +10,7 @@ export default function Actions({
   handleFocus,
 }) {
   const {
-    user: { uid: userId = '' },
+    user: { uid: userId },
   } = useContext(UserContext);
 
   const [toggleLiked, setToggleLiked] = useState(likedPhoto);
@@ -38,6 +38,7 @@ export default function Actions({
       <div className="flex justify-between p-4">
         <div className="flex">
           <svg
+            data-testid={`like-photo-${docId}`}
             onClick={handleToggleLiked}
             onKeyDown={event => {
               if (event.key === 'Enter') {
@@ -61,6 +62,7 @@ export default function Actions({
             />
           </svg>
           <svg
+            data-testid={`focus-input-${docId}`}
             onClick={handleFocus}
             onKeyDown={event => {
               if (event.key === 'Enter') {
