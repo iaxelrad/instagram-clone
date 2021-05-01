@@ -13,11 +13,11 @@ export default function Dashboard({ user: loggedInUser }) {
 
   return (
     <LoggedInUserContext.Provider value={{ user }}>
-      <div className="bg-gray-background">
+      <div className="bg-gray-background ">
         <Header />
         <div
           className="grid grid-cols-3 gap-4 justify-between mx-auto
-       max-w-screen-lg"
+       max-w-screen-lg px-4 lg:px-0"
         >
           <Timeline />
           <Sidebar />
