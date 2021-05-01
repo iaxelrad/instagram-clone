@@ -5,15 +5,12 @@ import { act } from 'react-dom/test-utils';
 import Profile from '../../pages/profile';
 import UserContext from '../../context/user';
 import FirebaseContext from '../../context/firebase';
-import LoggedInUserContext from '../../context/logged-in-user';
 import userFixture from '../../fixtures/logged-in-user';
-import photosFixture from '../../fixtures/timeline-photos';
-import suggestedProfilesFixture from '../../fixtures/suggested-profiles';
+import photosFixture from '../../fixtures/profile-photos';
 import {
-  getPhotos,
-  getSuggestedProfiles,
   getUserByUsername,
   getUserPhotosByUsername,
+  isUserFollowingProfile,
 } from '../../services/firebase';
 import profileThatIsFollowedByTheLoggedInUser from '../../fixtures/profile-followed-by-logged-in-user';
 import profileThatIsNotFollowedByTheLoggedInUser from '../../fixtures/profile-not-followed-by-logged-in-user';
@@ -32,7 +29,7 @@ jest.mock('react-router-dom', () => ({
 jest.mock('../../services/firebase');
 jest.mock('../../hooks/use-user');
 
-describe('<Profile>', () => {
+describe('<Profile />', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -71,7 +68,7 @@ describe('<Profile>', () => {
       );
 
       await waitFor(() => {
-        expect(mockHistoryPush).not.toHaveBeenCalled();
+        expect(getUserByUsername).toHaveBeenCalled();
         expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.NOT_FOUND);
         expect(getUserByUsername).toHaveBeenCalledWith('orwell');
         expect(getByTitle('Sign Out')).toBeTruthy();
@@ -108,9 +105,182 @@ describe('<Profile>', () => {
 
       //sign the user out.
       fireEvent.click(getByTitle('Sign Out'));
-      expect(mockHistoryPush).toHaveBeenCalledWith(ROUTES.LOGIN);
       fireEvent.keyDown(getByTitle('Sign Out'), {
         key: 'Enter',
+      });
+    });
+  });
+
+  it('renders the profile page with a user profile with 1 follower', async () => {
+    await act(async () => {
+      userFixture.followers = ['2']; // put followers to 1
+      getUserByUsername.mockImplementation(() => [userFixture]);
+      getUserPhotosByUsername.mockImplementation(() => photosFixture);
+      useUser.mockImplementation(() => ({
+        user: userFixture,
+        followers: ['2'],
+      }));
+
+      const { getByText, getByTitle } = render(
+        <Router>
+          <FirebaseContext.Provider
+            value={{
+              firebase: {
+                auth: jest.fn(() => ({
+                  signOut: jest.fn(() => ({
+                    updateProfile: jest.fn(() => Promise.resolve({})),
+                  })),
+                })),
+              },
+            }}
+          >
+            <UserContext.Provider
+              value={{
+                user: {
+                  uid: 'JNoMPWmBTpMcTdAcfvYV51hpODW2',
+                  displayName: 'itamar',
+                },
+              }}
+            >
+              <Profile />
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+
+      await waitFor(() => {
+        expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.NOT_FOUND);
+        expect(getUserByUsername).toHaveBeenCalled();
+        expect(getUserByUsername).toHaveBeenCalledWith('orwell');
+        expect(getByTitle('Sign Out')).toBeTruthy();
+        expect(getByText('itamar')).toBeTruthy();
+        expect(getByText('Itamar Axelrad')).toBeTruthy();
+      });
+    });
+  });
+
+  it('renders the profile page with a user profile and logged in and follows a user', async () => {
+    await act(async () => {
+      isUserFollowingProfile.mockImplementation(() => true);
+      useUser.mockImplementation(() => ({ user: userFixture }));
+      profileThatIsNotFollowedByTheLoggedInUser.followers = []; // reset followers
+      getUserByUsername.mockImplementation(() => [
+        profileThatIsNotFollowedByTheLoggedInUser,
+      ]);
+      getUserPhotosByUsername.mockImplementation(() => photosFixture);
+
+      const { getByText, getByTitle } = render(
+        <Router>
+          <FirebaseContext.Provider
+            value={{
+              firebase: {
+                auth: jest.fn(() => ({
+                  signOut: jest.fn(() => ({
+                    updateProfile: jest.fn(() => Promise.resolve({})),
+                  })),
+                })),
+              },
+            }}
+          >
+            <UserContext.Provider
+              value={{
+                user: {
+                  uid: 'JNoMPWmBTpMcTdAcfvYV51hpODW2',
+                  displayName: 'itamar',
+                },
+              }}
+            >
+              <Profile />
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+
+      await waitFor(() => {
+        expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.NOT_FOUND);
+        expect(getUserByUsername).toHaveBeenCalled();
+        expect(getUserByUsername).toHaveBeenCalledWith('orwell');
+        expect(getByTitle('Sign Out')).toBeTruthy();
+        expect(getByText('orwell')).toBeTruthy();
+        expect(getByText('George Orwell')).toBeTruthy();
+        fireEvent.keyDown(getByText('Follow'), {
+          key: 'Enter',
+        });
+      });
+    });
+  });
+
+  it('renders the profile page with a user profile and logged in and unfollows a user', async () => {
+    await act(async () => {
+      isUserFollowingProfile.mockImplementation(() => true);
+      useUser.mockImplementation(() => ({ user: userFixture }));
+      getUserByUsername.mockImplementation(() => [
+        profileThatIsFollowedByTheLoggedInUser,
+      ]);
+      getUserPhotosByUsername.mockImplementation(() => false); // falsy photos
+
+      const { getByText, getByTitle } = render(
+        <Router>
+          <FirebaseContext.Provider
+            value={{
+              firebase: {
+                auth: jest.fn(() => ({
+                  signOut: jest.fn(() => ({
+                    updateProfile: jest.fn(() => Promise.resolve({})),
+                  })),
+                })),
+              },
+            }}
+          >
+            <UserContext.Provider
+              value={{
+                user: {
+                  uid: 'JNoMPWmBTpMcTdAcfvYV51hpODW2',
+                  displayName: 'itamar',
+                },
+              }}
+            >
+              <Profile />
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+
+      await waitFor(() => {
+        expect(mockHistoryPush).not.toHaveBeenCalledWith(ROUTES.NOT_FOUND);
+        expect(getUserByUsername).toHaveBeenCalled();
+        expect(getUserByUsername).toHaveBeenCalledWith('orwell');
+        expect(getByTitle('Sign Out')).toBeTruthy();
+        expect(getByText('orwell')).toBeTruthy();
+        expect(getByText('George Orwell')).toBeTruthy();
+        fireEvent.click(getByText('Unfollow'));
+      });
+    });
+  });
+
+  it('renders the profile page but there is no user so redirect happens', async () => {
+    await act(async () => {
+      getUserByUsername.mockImplementation(() => []);
+      getUserPhotosByUsername.mockImplementation(() => []);
+      useUser.mockReturnValue(null);
+
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{}}>
+            <UserContext.Provider
+              value={{
+                uid: 'JNoMPWmBTpMcTdAcfvYV51hpODW2',
+                displayName: 'itamar',
+              }}
+            >
+              <Profile />
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+
+      await waitFor(() => {
+        expect(mockHistoryPush).toHaveBeenCalledWith(ROUTES.NOT_FOUND);
       });
     });
   });
