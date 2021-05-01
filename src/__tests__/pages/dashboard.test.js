@@ -54,7 +54,6 @@ describe('<Dashboard />', () => {
         getByAltText,
         getByTitle,
         getAllByText,
-        // getAllByAltText,
         getByTestId,
       } = render(
         <Router>
