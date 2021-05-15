@@ -47,6 +47,7 @@ export default function Header() {
                 </Link>
                 <button
                   type="button"
+                  data-testid="sign-out"
                   title="Sign Out"
                   onClick={() => {
                     firebase.auth().signOut();
